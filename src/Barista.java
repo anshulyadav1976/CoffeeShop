@@ -1,25 +1,23 @@
-import java.util.concurrent.ThreadLocalRandom;
+// Barista Class
+class Barista extends Thread {
+    private final CoffeeShop coffeeShop;
+    private final int baristaNumber;
 
-public class Barista implements Runnable {
-    private final OrderQueue orderQueue;
-    private final int baristaId;
-
-    public Barista(OrderQueue orderQueue, int baristaId) {
-        this.orderQueue = orderQueue;
-        this.baristaId = baristaId;
+    public Barista(CoffeeShop coffeeShop, int baristaNumber) {
+        this.coffeeShop = coffeeShop;
+        this.baristaNumber = baristaNumber;
     }
 
     @Override
     public void run() {
         try {
             while (true) {
-                Order order = orderQueue.takeOrder(); // Take order from the queue
-                System.out.println("Barista " + baristaId + " is preparing: " + order);
-                Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 1500)); // Simulate coffee preparation time
+                String order = coffeeShop.prepareOrder(baristaNumber);
+                System.out.println("Barista " + baristaNumber + " completed order: " + order);
+                Thread.sleep(1000); // Simulate time taken to prepare coffee
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            System.out.println("Barista " + baristaId + " interrupted.");
         }
     }
 }

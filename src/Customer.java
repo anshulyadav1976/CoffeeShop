@@ -1,26 +1,21 @@
-import java.util.concurrent.ThreadLocalRandom;
+// Customer Class
+class Customer extends Thread {
+    private final CoffeeShop coffeeShop;
+    private final int customerNumber;
+    private final String order;
 
-public class Customer implements Runnable {
-    private final OrderQueue orderQueue;
-    private final int customerId;
-
-    public Customer(OrderQueue orderQueue, int customerId) {
-        this.orderQueue = orderQueue;
-        this.customerId = customerId;
+    public Customer(CoffeeShop coffeeShop, int customerNumber, String order) {
+        this.coffeeShop = coffeeShop;
+        this.customerNumber = customerNumber;
+        this.order = order;
     }
 
     @Override
     public void run() {
         try {
-            while (true) {
-                int orderId = ThreadLocalRandom.current().nextInt(1, 100);
-                Order order = new Order(orderId);
-                orderQueue.placeOrder(order); // Place order in the queue
-                Thread.sleep(ThreadLocalRandom.current().nextInt(500, 1000)); // Simulate time between orders
-            }
+            coffeeShop.placeOrder(order, customerNumber);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            System.out.println("Customer " + customerId + " interrupted.");
         }
     }
 }
